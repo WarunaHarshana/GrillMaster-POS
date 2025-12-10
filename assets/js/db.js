@@ -1,5 +1,4 @@
-// Database for GrillMaster POS
-
+// My simple data storage (just an object for now)
 const db = {
     products: [
         // Burgers

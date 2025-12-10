@@ -33,6 +33,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick="showSection('customers')">Customers</a>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -40,7 +41,7 @@
 
     <div class="container-fluid px-4">
 
-        <!-- POS Section (Home/Order Interface) -->
+        <!-- This is the main part where we sell stuff -->
         <div id="section-home" class="section-block">
             <div class="row">
                 <div class="col-md-8">
@@ -69,7 +70,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card" id="order-section">
                         <div class="card-header bg-white">
                             <h5 class="mb-0">Current Order</h5>
                         </div>
@@ -79,7 +80,7 @@
                                 <label class="form-label fw-bold">Select Customer</label>
                                 <select class="form-select" id="order-customer-select">
                                     <option value="" selected disabled>Choose...</option>
-                                    <!-- Populated by JS -->
+                                    <!-- JavaScript will put the items here -->
                                 </select>
                             </div>
 
@@ -116,7 +117,7 @@
             </div>
         </div>
 
-        <!-- Product Management Section -->
+        <!-- This section acts like a back-office to manage my menu items -->
         <div id="section-products" class="section-block d-none">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -124,7 +125,7 @@
                     <button class="btn btn-primary btn-sm" onclick="toggleProductForm()">+ Add New Product</button>
                 </div>
                 <div class="card-body">
-                    <!-- Inline Add/Edit Form -->
+                    <!-- Simple form to add new food -->
                     <div id="product-form-card" class="card mb-4 border-primary d-none">
                         <div class="card-header fw-bold" id="product-form-title">Add New Product</div>
                         <div class="card-body">
@@ -179,7 +180,7 @@
             </div>
         </div>
 
-        <!-- Placeholder Sections -->
+        <!-- Saved orders go here -->
         <div id="section-orders" class="section-block d-none">
             <div class="card">
                 <div class="card-header">
@@ -206,7 +207,7 @@
                 </div>
             </div>
         </div>
-        <!-- Customer Management Section -->
+        <!-- Managing my customers -->
         <div id="section-customers" class="section-block d-none">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">

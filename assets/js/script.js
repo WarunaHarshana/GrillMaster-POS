@@ -1,11 +1,8 @@
 // Main App Logic
 
-// Global cart (in memory for this session)
+
 let cart = [];
 
-// --- Navigation & Helper Functions ---
-
-// --- Navigation & Helper Functions ---
 
 const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
 
@@ -33,9 +30,9 @@ function showMessage(title, message, type = 'info') {
     
     document.getElementById('messageModalBody').innerHTML = bodyContent;
     
-    // Optional: Style header based on type
+    
     const header = document.querySelector('#messageModal .modal-header');
-    header.className = 'modal-header'; // Reset
+    header.className = 'modal-header'; 
     if (type === 'danger') header.classList.add('bg-danger', 'text-white');
     else if (type === 'success') header.classList.add('bg-success', 'text-white');
     else if (type === 'warning') header.classList.add('bg-warning', 'text-dark');
@@ -58,13 +55,13 @@ function showSection(sectionId) {
         renderProductManagementTable();
     } else if(sectionId === 'customers') {
         renderCustomerManagementTable();
-        loadCustomersForOrder(); // Ensure dropdown is fresh when switching to customers (optional but good practice)
+        loadCustomersForOrder(); 
     } else if(sectionId === 'orders') {
         renderOrderHistoryTable();
     }
 }
 
-// --- Phase 5: Order History ---
+// --- Showing Past Orders ---
 
 function renderOrderHistoryTable() {
     const tbody = document.getElementById('order-history-table');
@@ -75,7 +72,7 @@ function renderOrderHistoryTable() {
         return;
     }
 
-    // Sort by Date (Newest First)
+    // Show newest first
     const sortedOrders = [...db.orders].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     sortedOrders.forEach(order => {
@@ -102,7 +99,7 @@ function renderOrderHistoryTable() {
     });
 }
 
-// --- Phase 3: Customer Management CRUD ---
+// --- Managing Customers ---
 
 function renderCustomerManagementTable() {
     const tbody = document.getElementById('customer-management-table');
@@ -163,7 +160,7 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
     const email = document.getElementById('custEmail').value;
     const phone = document.getElementById('custPhone').value;
 
-    // Sri Lankan Phone Number Validation (10 digits, starts with 0)
+    // Phone Number Validation 
     const phoneRegex = /^0\d{9}$/;
     if (!phoneRegex.test(phone)) {
         showMessage("Validation Error", "Please enter a valid Sri Lankan phone number.", "danger");
@@ -187,9 +184,7 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
     loadCustomersForOrder(); // Refresh POS dropdown
 });
 
-// --- Phase 2: Product Management CRUD ---
-
-// --- Phase 2: Product Management CRUD (Inline Form) ---
+// --- Managing Products ---
 
 function renderProductManagementTable() {
     const tbody = document.getElementById('product-management-table');
@@ -283,7 +278,7 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
     displayProducts(); // Refresh POS view
 });
 
-// --- Phase 4 (Partial): POS Interface Logic ---
+// --- Main Selling Logic ---
 
 function displayProducts(filter = 'all') {
     const productList = document.getElementById("product-list");
@@ -310,7 +305,7 @@ function displayProducts(filter = 'all') {
 }
 
 function filterProducts(category) {
-    // Update active button state (simple implementation)
+    
     document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
     
@@ -375,7 +370,7 @@ function removeFromCart(id) {
     updateCartUI();
 }
 
-// --- Phase 4: POS Logic (Orders) ---
+// --- Handling the Checkout ---
 
 function loadCustomersForOrder() {
     const select = document.getElementById('order-customer-select');
@@ -401,7 +396,7 @@ function placeOrder() {
 
     const customer = db.customers.find(c => c.id == customerId);
     
-    // Calculate total
+    // Calculate total price
     let total = 0;
     cart.forEach(item => {
         total += item.price * item.qty;
@@ -412,7 +407,7 @@ function placeOrder() {
     const newOrder = {
         id: db.orders.length > 0 ? Math.max(...db.orders.map(o => o.id)) + 1 : 1001,
         customerId: customer.id,
-        customerName: customer.name, // Storing snapshot of name
+        customerName: customer.name, 
         items: [...cart],
         total: finalTotal,
         date: new Date().toISOString()
@@ -429,17 +424,13 @@ function placeOrder() {
     document.getElementById('order-customer-select').value = "";
 }
 
-// Update Place Order Button
-// Note: We need to attach this function to the button in HTML or here. 
-// Since HTML already has onclick="Place Order", we should update HTML or use event listener. 
-// Current HTML: <button class="btn btn-success btn-lg">Place Order</button> (No onclick)
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
     displayProducts();
     loadCustomersForOrder();
     
-    // Attach Place Order Event
+    // Start everything when the page is ready
     const placeOrderBtn = document.querySelector('.btn-success.btn-lg');
     if(placeOrderBtn) {
         placeOrderBtn.addEventListener('click', placeOrder);

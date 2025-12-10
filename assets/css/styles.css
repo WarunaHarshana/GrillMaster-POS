@@ -1,24 +1,25 @@
-/* Google Fonts Import */
+
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-    /* Color Palette - Vibrant Burger Theme */
+
     --primary-color: #D62828;
-    /* Deep Red */
+
     --primary-hover: #B51F1F;
 
     --secondary-color: #F77F00;
-    /* Vibrant Orange */
+
     --secondary-hover: #D96C00;
 
     --accent-color: #FCA311;
-    /* Golden Yellow */
+
 
     --bg-body: #ffffff;
-    /* Pure White */
-    --bg-surface: #ffffff;
-    --bg-highlight: #ffffff;
-    /* Pure White for seamless images */
+
+    --bg-surface: rgba(255, 255, 255, 0.5);
+
+    --bg-highlight: #FFF4E6;
+
 
     --text-main: #1F1F1F;
     --text-muted: #6B7280;
@@ -26,18 +27,20 @@
 
     --border-color: #F0EAE2;
 
-    /* Spacing & Radius */
+    /* Making things rounded */
     --radius-sm: 0.5rem;
     --radius-md: 1rem;
     --radius-lg: 1.5rem;
     --radius-full: 9999px;
 
-    /* Shadows - Soft & Diffused */
+    /* Soft shadows */
     --shadow-sm: 0 2px 4px rgba(214, 40, 40, 0.05);
     --shadow-md: 0 8px 16px -4px rgba(214, 40, 40, 0.08);
     --shadow-lg: 0 20px 25px -5px rgba(214, 40, 40, 0.1), 0 10px 10px -5px rgba(214, 40, 40, 0.04);
     --shadow-hover: 0 20px 30px -10px rgba(214, 40, 40, 0.15);
 }
+
+
 
 /* Base Styles */
 body {
@@ -64,7 +67,7 @@ h6 {
     color: var(--text-main);
 }
 
-/* Navbar Modernization */
+/* Styling the navigation bar */
 .navbar {
     background-color: rgba(255, 255, 255, 0.9) !important;
     box-shadow: var(--shadow-sm);
@@ -103,11 +106,13 @@ h6 {
     box-shadow: 0 4px 12px rgba(247, 127, 0, 0.3);
 }
 
-/* Card Modernization */
+/* Making the cards look nice */
 .card {
     border: none;
     border-radius: var(--radius-lg);
     background-color: var(--bg-surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: var(--shadow-md);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
@@ -128,7 +133,6 @@ h6 {
 /* Button Refinement */
 .btn {
     border-radius: var(--radius-full);
-    /* Pill shape */
     padding: 0.6rem 1.5rem;
     font-weight: 600;
     font-size: 0.95rem;
@@ -158,10 +162,10 @@ h6 {
 
 .btn-success {
     background-color: #10B981;
-    /* Fresh Green for Checkout */
+
 }
 
-/* Outline Buttons (Filter Group) */
+/* Outline Buttons */
 .btn-group .btn {
     border-radius: var(--radius-sm);
     margin: 0 0.25rem;
@@ -218,6 +222,8 @@ h6 {
     padding: 0.5rem;
     background-color: var(--bg-highlight);
     border-radius: var(--radius-md) var(--radius-md) 0 0;
+    mix-blend-mode: multiply;
+
 }
 
 .product-card .card-body {
@@ -294,10 +300,27 @@ h6 {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #9CA3AF;
+    background: var(--text-muted);
 }
 
-/* Success Animation (Kept mostly same but updated colors) */
+/* Sticky Order Panel */
+#order-section {
+    position: sticky;
+    top: 5rem;
+    height: calc(100vh - 6rem);
+    display: flex;
+    flex-direction: column;
+}
+
+#order-section .card-body {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+
+
+
+/* Animation */
 .success-checkmark {
     width: 80px;
     height: 115px;
