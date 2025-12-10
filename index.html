@@ -11,95 +11,181 @@
 
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">🍔 GrillMaster Burgers</span>
+            <a class="navbar-brand" href="#">🍔 GrillMaster POS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showSection('home')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('orders')">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('products')">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('customers')">Customers</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="container-fluid">
-        <div class="row">
-
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Menu</h5>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-outline-primary active">All</button>
-                                <button type="button" class="btn btn-outline-primary">Burgers</button>
-                                <button type="button" class="btn btn-outline-primary">Fries</button>
-                                <button type="button" class="btn btn-outline-primary">Drinks</button>
+        
+        <!-- POS Section (Home/Order Interface) -->
+        <div id="section-home" class="section-block">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Menu</h5>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-primary active" onclick="filterProducts('all')">All</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="filterProducts('burgers')">Burgers</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="filterProducts('fries')">Fries</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="filterProducts('drinks')">Drinks</button>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <input type="text" class="form-control" placeholder="Search for burgers...">
                             </div>
                         </div>
-                        <div class="mt-3">
-                            <input type="text" class="form-control" placeholder="Search for burgers...">
+
+                        <div class="card-body" style="height: 75vh; overflow-y: auto;">
+                            <div class="row g-3" id="product-list"></div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="card-body" style="height: 75vh; overflow-y: auto;">
-                        <div class="row g-3" id="product-list"></div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Current Order</h5>
+                        </div>
+                        <div class="card-body d-flex flex-column" style="height: 75vh;">
+                            <div class="table-responsive flex-grow-1">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cart-items"></tbody>
+                                </table>
+                            </div>
+
+                            <div class="border-top pt-3 mt-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal</span>
+                                    <span class="fw-bold" id="subtotal-display">Rs. 0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tax (10%)</span>
+                                    <span class="fw-bold" id="tax-display">Rs. 0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3 fs-4 text-primary">
+                                    <strong>Total</strong>
+                                    <strong id="total-display">Rs. 0.00</strong>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success btn-lg">Place Order</button>
+                                    <button class="btn btn-outline-danger" onclick="cart=[]; updateCartUI();">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Current Order</h5>
-                    </div>
-                    <div class="card-body d-flex flex-column" style="height: 75vh;">
-
-                        <div class="table-responsive flex-grow-1">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Qty</th>
-                                        <th>Price</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cart-items">
-                                    <tr>
-                                        <td>Classic Burger</td>
-                                        <td>1</td>
-                                        <td>1500</td>
-                                        <td><button class="btn btn-sm btn-danger text-white">&times;</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="border-top pt-3 mt-3">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Subtotal</span>
-                                <span class="fw-bold" id="subtotal-display">Rs. 0.00</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Tax (10%)</span>
-                                <span class="fw-bold" id="tax-display">Rs. 0.00</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-3 fs-4 text-primary">
-                                <strong>Total</strong>
-                                <strong id="total-display">Rs. 0.00</strong>
-                            </div>
-
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-success btn-lg">Place Order</button>
-                                <button class="btn btn-outline-danger"
-                                    onclick="cart=[]; updateCartUI();">Cancel</button>
-                            </div>
-                        </div>
-
-                    </div>
+        <!-- Product Management Section -->
+        <div id="section-products" class="section-block d-none">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Product Management</h5>
+                    <button class="btn btn-light btn-sm" onclick="showAddProductModal()">+ Add New Product</button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-management-table">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
+        
+        <!-- Placeholder Sections -->
+        <div id="section-orders" class="section-block d-none">
+            <h2>Orders Section (Coming Soon)</h2>
+        </div>
+        <div id="section-customers" class="section-block d-none">
+            <h2>Customers Section (Coming Soon)</h2>
+        </div>
 
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Add Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm">
+                        <input type="hidden" id="prodId">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="prodName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="prodCategory" required>
+                                <option value="burgers">Burgers</option>
+                                <option value="fries">Fries</option>
+                                <option value="drinks">Drinks</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price (Rs)</label>
+                            <input type="number" class="form-control" id="prodPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="prodImage" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save Product</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/db.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 
