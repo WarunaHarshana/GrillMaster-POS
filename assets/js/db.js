@@ -32,7 +32,9 @@ const db = {
         },
     ],
     customers: [
-        // { id: 1, name: "John Doe", email: "john@example.com", phone: "0771234567" }
+        { id: 1, name: "John Doe", email: "john@example.com", phone: "0771234567" },
+        { id: 2, name: "Jane Smith", email: "jane@mail.com", phone: "0719876543" },
+        { id: 3, name: "David Johnson", email: "david.j@xyz.com", phone: "0765551234" }
     ],
     orders: []
 };

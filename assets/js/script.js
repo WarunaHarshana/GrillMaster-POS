@@ -17,8 +17,86 @@ function showSection(sectionId) {
 
     if(sectionId === 'products') {
         renderProductManagementTable();
+    } else if(sectionId === 'customers') {
+        renderCustomerManagementTable();
     }
 }
+
+// --- Phase 3: Customer Management CRUD ---
+
+function renderCustomerManagementTable() {
+    const tbody = document.getElementById('customer-management-table');
+    tbody.innerHTML = '';
+    
+    db.customers.forEach(c => {
+        const row = `
+            <tr>
+                <td>${c.id}</td>
+                <td>${c.name}</td>
+                <td>${c.email}</td>
+                <td>${c.phone}</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="editCustomer(${c.id})">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteCustomer(${c.id})">Delete</button>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
+
+const customerModal = new bootstrap.Modal(document.getElementById('customerModal'));
+
+function showAddCustomerModal() {
+    document.getElementById('customerForm').reset();
+    document.getElementById('custId').value = '';
+    document.getElementById('customerModalLabel').innerText = 'Add Customer';
+    customerModal.show();
+}
+
+function editCustomer(id) {
+    const c = db.customers.find(x => x.id === id);
+    if (!c) return;
+
+    document.getElementById('custId').value = c.id;
+    document.getElementById('custName').value = c.name;
+    document.getElementById('custEmail').value = c.email;
+    document.getElementById('custPhone').value = c.phone;
+    
+    document.getElementById('customerModalLabel').innerText = 'Edit Customer';
+    customerModal.show();
+}
+
+function deleteCustomer(id) {
+    if(confirm('Are you sure you want to delete this customer?')) {
+        db.customers = db.customers.filter(c => c.id !== id);
+        renderCustomerManagementTable();
+    }
+}
+
+document.getElementById('customerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const id = document.getElementById('custId').value;
+    const name = document.getElementById('custName').value;
+    const email = document.getElementById('custEmail').value;
+    const phone = document.getElementById('custPhone').value;
+
+    if (id) {
+        // Update
+        const index = db.customers.findIndex(c => c.id == id);
+        if(index !== -1) {
+            db.customers[index] = { ...db.customers[index], name, email, phone };
+        }
+    } else {
+        // Add
+        const newId = db.customers.length > 0 ? Math.max(...db.customers.map(c => c.id)) + 1 : 1;
+        db.customers.push({ id: newId, name, email, phone });
+    }
+
+    customerModal.hide();
+    renderCustomerManagementTable();
+});
 
 // --- Phase 2: Product Management CRUD ---
 
