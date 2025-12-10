@@ -9,16 +9,16 @@
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body class="bg-light">
+<body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">🍔 GrillMaster POS</a>
+            <a class="navbar-brand" href="#">🍔 Grillmaster Burgers</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="#" onclick="showSection('home')">Home</a>
                     </li>
@@ -42,7 +42,7 @@
         <div id="section-home" class="section-block">
             <div class="row">
                 <div class="col-md-8">
-                    <div class="card shadow-sm">
+                    <div class="card">
                         <div class="card-header bg-white">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Menu</h5>
@@ -57,9 +57,7 @@
                                         onclick="filterProducts('drinks')">Drinks</button>
                                 </div>
                             </div>
-                            <div class="mt-3">
-                                <input type="text" class="form-control" placeholder="Search for burgers...">
-                            </div>
+
                         </div>
 
                         <div class="card-body" style="height: 75vh; overflow-y: auto;">
@@ -69,7 +67,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="card shadow-sm">
+                    <div class="card">
                         <div class="card-header bg-white">
                             <h5 class="mb-0">Current Order</h5>
                         </div>
@@ -125,15 +123,15 @@
 
         <!-- Product Management Section -->
         <div id="section-products" class="section-block d-none">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Product Management</h5>
-                    <button class="btn btn-light btn-sm" onclick="toggleProductForm()">+ Add New Product</button>
+                    <button class="btn btn-primary btn-sm" onclick="toggleProductForm()">+ Add New Product</button>
                 </div>
                 <div class="card-body">
                     <!-- Inline Add/Edit Form -->
                     <div id="product-form-card" class="card mb-4 border-primary d-none">
-                        <div class="card-header bg-light fw-bold" id="product-form-title">Add New Product</div>
+                        <div class="card-header fw-bold" id="product-form-title">Add New Product</div>
                         <div class="card-body">
                             <form id="productForm">
                                 <input type="hidden" id="prodId">
@@ -188,14 +186,37 @@
 
         <!-- Placeholder Sections -->
         <div id="section-orders" class="section-block d-none">
-            <h2>Orders Section (Coming Soon)</h2>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Order History</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="order-history-table">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Customer Management Section -->
         <div id="section-customers" class="section-block d-none">
-            <div class="card shadow-sm">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Customer Management</h5>
-                    <button class="btn btn-light btn-sm" onclick="showAddCustomerModal()">+ Add New Customer</button>
+                    <button class="btn btn-primary btn-sm" onclick="showAddCustomerModal()">+ Add New Customer</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -251,6 +272,23 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Message Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalTitle">Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="messageModalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/js/db.js"></script>
     <script src="assets/js/script.js"></script>
 </body>

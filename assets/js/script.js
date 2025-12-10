@@ -5,6 +5,45 @@ let cart = [];
 
 // --- Navigation & Helper Functions ---
 
+// --- Navigation & Helper Functions ---
+
+const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+
+function showMessage(title, message, type = 'info') {
+    document.getElementById('messageModalTitle').innerText = title;
+    
+    let bodyContent = '';
+    
+    if (type === 'success') {
+        bodyContent += `
+        <div class="success-checkmark">
+            <div class="check-icon">
+                <span class="icon-line line-tip"></span>
+                <span class="icon-line line-long"></span>
+                <div class="icon-circle"></div>
+                <div class="icon-fix"></div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <h5>${message}</h5>
+        </div>`;
+    } else {
+        bodyContent = message;
+    }
+    
+    document.getElementById('messageModalBody').innerHTML = bodyContent;
+    
+    // Optional: Style header based on type
+    const header = document.querySelector('#messageModal .modal-header');
+    header.className = 'modal-header'; // Reset
+    if (type === 'danger') header.classList.add('bg-danger', 'text-white');
+    else if (type === 'success') header.classList.add('bg-success', 'text-white');
+    else if (type === 'warning') header.classList.add('bg-warning', 'text-dark');
+    else header.classList.add('bg-primary', 'text-white');
+
+    messageModal.show();
+}
+
 function showSection(sectionId) {
     // Hide all sections
     document.querySelectorAll('.section-block').forEach(el => el.classList.add('d-none'));
@@ -19,7 +58,48 @@ function showSection(sectionId) {
         renderProductManagementTable();
     } else if(sectionId === 'customers') {
         renderCustomerManagementTable();
+        loadCustomersForOrder(); // Ensure dropdown is fresh when switching to customers (optional but good practice)
+    } else if(sectionId === 'orders') {
+        renderOrderHistoryTable();
     }
+}
+
+// --- Phase 5: Order History ---
+
+function renderOrderHistoryTable() {
+    const tbody = document.getElementById('order-history-table');
+    tbody.innerHTML = '';
+
+    if (db.orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No orders found.</td></tr>';
+        return;
+    }
+
+    // Sort by Date (Newest First)
+    const sortedOrders = [...db.orders].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    sortedOrders.forEach(order => {
+        const itemSummary = order.items.map(i => `${i.name} (x${i.qty})`).join(', ');
+        // Format Date
+        const dateObj = new Date(order.date);
+        const formattedDate = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString();
+
+        const row = `
+            <tr>
+                <td><span class="badge bg-secondary">#${order.id}</span></td>
+                <td>${formattedDate}</td>
+                <td>${order.customerName}</td>
+                <td title="${itemSummary}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    ${itemSummary}
+                </td>
+                <td class="fw-bold">Rs. ${order.total.toFixed(2)}</td>
+                <td>
+                    <button class="btn btn-sm btn-info text-white" onclick="alert('Order Items:\\n${itemSummary}')">View</button>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
 }
 
 // --- Phase 3: Customer Management CRUD ---
@@ -86,7 +166,7 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
     // Sri Lankan Phone Number Validation (10 digits, starts with 0)
     const phoneRegex = /^0\d{9}$/;
     if (!phoneRegex.test(phone)) {
-        alert("Please enter a valid Sri Lankan phone number (e.g., 0712345678).");
+        showMessage("Validation Error", "Please enter a valid Sri Lankan phone number.", "danger");
         return;
     }
 
@@ -214,12 +294,13 @@ function displayProducts(filter = 'all') {
     filteredProducts.forEach((product) => {
         const productCard = `
             <div class="col-md-4 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm" style="cursor: pointer;" onclick="addToCart(${product.id})">
-                    <img src="${product.image}" class="card-img-top" alt="${product.name}" style="height: 150px; object-fit: cover;">
-                    <div class="card-body text-center">
+                <div class="card h-100 product-card">
+                    <img src="${product.image}" class="card-img-top" alt="${product.name}" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x300?text=${encodeURIComponent(product.name)}';">
+                    <div class="card-body">
                         <h6 class="card-title fw-bold">${product.name}</h6>
-                        <p class="card-text text-primary fw-bold">Rs. ${product.price.toFixed(2)}</p>
-                        <button class="btn btn-sm btn-outline-primary w-100">Add to Cart</button>
+                        <p class="card-text product-price">Rs. ${product.price.toFixed(2)}</p>
+                        <button class="btn btn-sm btn-outline-primary w-100" onclick="addToCart(${product.id})">Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -312,12 +393,12 @@ function placeOrder() {
     const customerId = document.getElementById('order-customer-select').value;
     
     if (cart.length === 0) {
-        alert("Cart is empty!");
+        showMessage("Empty Cart", "Cart is empty!", "warning");
         return;
     }
     
     if (!customerId) {
-        alert("Please select a customer!");
+        showMessage("Missing Customer", "Please select a customer!", "warning");
         return;
     }
 
@@ -344,7 +425,7 @@ function placeOrder() {
     db.orders.push(newOrder);
     
     console.log("Order Placed:", newOrder);
-    alert(`Order Placed Successfully! Order ID: ${newOrder.id}`);
+    showMessage("Success", `Order Placed Successfully! Order ID: ${newOrder.id}`, "success");
 
     // Clear Cart & UI
     cart = [];
