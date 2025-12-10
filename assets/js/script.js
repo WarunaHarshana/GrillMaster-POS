@@ -273,7 +273,74 @@ function removeFromCart(id) {
     updateCartUI();
 }
 
+// --- Phase 4: POS Logic (Orders) ---
+
+function loadCustomersForOrder() {
+    const select = document.getElementById('order-customer-select');
+    select.innerHTML = '<option value="" selected disabled>Choose...</option>';
+    
+    db.customers.forEach(c => {
+        select.innerHTML += `<option value="${c.id}">${c.name} (${c.phone})</option>`;
+    });
+}
+
+function placeOrder() {
+    const customerId = document.getElementById('order-customer-select').value;
+    
+    if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
+    
+    if (!customerId) {
+        alert("Please select a customer!");
+        return;
+    }
+
+    const customer = db.customers.find(c => c.id == customerId);
+    
+    // Calculate total
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * item.qty;
+    });
+    const tax = total * 0.1;
+    const finalTotal = total + tax;
+
+    // Create Order Object
+    const newOrder = {
+        id: db.orders.length > 0 ? Math.max(...db.orders.map(o => o.id)) + 1 : 1001,
+        customerId: customer.id,
+        customerName: customer.name, // Storing snapshot of name
+        items: [...cart],
+        total: finalTotal,
+        date: new Date().toISOString()
+    };
+
+    db.orders.push(newOrder);
+    
+    console.log("Order Placed:", newOrder);
+    alert(`Order Placed Successfully! Order ID: ${newOrder.id}`);
+
+    // Clear Cart & UI
+    cart = [];
+    updateCartUI();
+    document.getElementById('order-customer-select').value = "";
+}
+
+// Update Place Order Button
+// Note: We need to attach this function to the button in HTML or here. 
+// Since HTML already has onclick="Place Order", we should update HTML or use event listener. 
+// Current HTML: <button class="btn btn-success btn-lg">Place Order</button> (No onclick)
+
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
     displayProducts();
+    loadCustomersForOrder();
+    
+    // Attach Place Order Event
+    const placeOrderBtn = document.querySelector('.btn-success.btn-lg');
+    if(placeOrderBtn) {
+        placeOrderBtn.addEventListener('click', placeOrder);
+    }
 });
