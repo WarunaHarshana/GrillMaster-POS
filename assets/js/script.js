@@ -353,11 +353,8 @@ function updateCartUI() {
         cartTable.innerHTML += row;
     });
 
-    const tax = subtotal * 0.1;
-    const total = subtotal + tax;
+    const total = subtotal;
 
-    document.getElementById("subtotal-display").innerText = `Rs. ${subtotal.toFixed(2)}`;
-    document.getElementById("tax-display").innerText = `Rs. ${tax.toFixed(2)}`;
     document.getElementById("total-display").innerText = `Rs. ${total.toFixed(2)}`;
 }
 
@@ -409,8 +406,7 @@ function placeOrder() {
     cart.forEach(item => {
         total += item.price * item.qty;
     });
-    const tax = total * 0.1;
-    const finalTotal = total + tax;
+    const finalTotal = total;
 
     // Create Order Object
     const newOrder = {

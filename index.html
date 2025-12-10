@@ -11,9 +11,11 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg mb-4">
+    <nav class="navbar navbar-expand-lg sticky-top mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">🍔 Grillmaster Burgers</a>
+            <a class="navbar-brand" href="#">
+                <span class="fs-2 me-2">🍔</span>Grillmaster
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -36,7 +38,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid">
+    <div class="container-fluid px-4">
 
         <!-- POS Section (Home/Order Interface) -->
         <div id="section-home" class="section-block">
@@ -96,14 +98,7 @@
                             </div>
 
                             <div class="border-top pt-3 mt-3">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Subtotal</span>
-                                    <span class="fw-bold" id="subtotal-display">Rs. 0.00</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Tax (10%)</span>
-                                    <span class="fw-bold" id="tax-display">Rs. 0.00</span>
-                                </div>
+
                                 <div class="d-flex justify-content-between mb-3 fs-4 text-primary">
                                     <strong>Total</strong>
                                     <strong id="total-display">Rs. 0.00</strong>
