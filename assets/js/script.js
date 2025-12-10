@@ -100,6 +100,8 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
 
 // --- Phase 2: Product Management CRUD ---
 
+// --- Phase 2: Product Management CRUD (Inline Form) ---
+
 function renderProductManagementTable() {
     const tbody = document.getElementById('product-management-table');
     tbody.innerHTML = '';
@@ -122,18 +124,30 @@ function renderProductManagementTable() {
     });
 }
 
-const productModal = new bootstrap.Modal(document.getElementById('productModal'));
-
-function showAddProductModal() {
-    document.getElementById('productForm').reset();
-    document.getElementById('prodId').value = '';
-    document.getElementById('productModalLabel').innerText = 'Add Product';
-    productModal.show();
+function toggleProductForm() {
+    const formCard = document.getElementById('product-form-card');
+    const form = document.getElementById('productForm');
+    const isHidden = formCard.classList.contains('d-none');
+    
+    if (isHidden) {
+        // Show
+        formCard.classList.remove('d-none');
+        document.getElementById('product-form-title').innerText = 'Add New Product';
+        form.reset();
+        document.getElementById('prodId').value = '';
+    } else {
+        // Hide
+        formCard.classList.add('d-none');
+    }
 }
 
 function editProduct(id) {
     const p = db.products.find(x => x.id === id);
     if (!p) return;
+
+    // Show form
+    const formCard = document.getElementById('product-form-card');
+    formCard.classList.remove('d-none');
 
     document.getElementById('prodId').value = p.id;
     document.getElementById('prodName').value = p.name;
@@ -141,8 +155,9 @@ function editProduct(id) {
     document.getElementById('prodPrice').value = p.price;
     document.getElementById('prodImage').value = p.image;
     
-    document.getElementById('productModalLabel').innerText = 'Edit Product';
-    productModal.show();
+    document.getElementById('product-form-title').innerText = 'Edit Product';
+    
+    formCard.scrollIntoView({ behavior: 'smooth' });
 }
 
 function deleteProduct(id) {
@@ -164,7 +179,7 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
 
     if (id) {
         // Update
-        const index = db.products.findIndex(p => p.id == id); // Use == for string/number match
+        const index = db.products.findIndex(p => p.id == id);
         if(index !== -1) {
             db.products[index] = { ...db.products[index], name, category, price, image };
         }
@@ -174,7 +189,7 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
         db.products.push({ id: newId, name, category, price, image });
     }
 
-    productModal.hide();
+    toggleProductForm(); // Hide form
     renderProductManagementTable();
     displayProducts(); // Refresh POS view
 });

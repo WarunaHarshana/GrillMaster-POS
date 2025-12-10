@@ -128,9 +128,45 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Product Management</h5>
-                    <button class="btn btn-light btn-sm" onclick="showAddProductModal()">+ Add New Product</button>
+                    <button class="btn btn-light btn-sm" onclick="toggleProductForm()">+ Add New Product</button>
                 </div>
                 <div class="card-body">
+                    <!-- Inline Add/Edit Form -->
+                    <div id="product-form-card" class="card mb-4 border-primary d-none">
+                        <div class="card-header bg-light fw-bold" id="product-form-title">Add New Product</div>
+                        <div class="card-body">
+                            <form id="productForm">
+                                <input type="hidden" id="prodId">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="prodName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" id="prodCategory" required>
+                                            <option value="burgers">Burgers</option>
+                                            <option value="fries">Fries</option>
+                                            <option value="drinks">Drinks</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Price (Rs)</label>
+                                        <input type="number" class="form-control" id="prodPrice" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Image URL</label>
+                                        <input type="url" class="form-control" id="prodImage" required>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-secondary me-2"
+                                            onclick="toggleProductForm()">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Save Product</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
@@ -212,48 +248,11 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Add/Edit Product Modal -->
-        <div class="modal fade" id="productModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="productModalLabel">Add Product</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="productForm">
-                            <input type="hidden" id="prodId">
-                            <div class="mb-3">
-                                <label class="form-label">Name</label>
-                                <input type="text" class="form-control" id="prodName" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Category</label>
-                                <select class="form-select" id="prodCategory" required>
-                                    <option value="burgers">Burgers</option>
-                                    <option value="fries">Fries</option>
-                                    <option value="drinks">Drinks</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Price (Rs)</label>
-                                <input type="number" class="form-control" id="prodPrice" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Image URL</label>
-                                <input type="url" class="form-control" id="prodImage" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Save Product</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/db.js"></script>
-        <script src="assets/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/db.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
 
 </html>
