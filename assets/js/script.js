@@ -71,6 +71,7 @@ function deleteCustomer(id) {
     if(confirm('Are you sure you want to delete this customer?')) {
         db.customers = db.customers.filter(c => c.id !== id);
         renderCustomerManagementTable();
+        loadCustomersForOrder(); // Refresh POS dropdown
     }
 }
 
@@ -81,6 +82,13 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
     const name = document.getElementById('custName').value;
     const email = document.getElementById('custEmail').value;
     const phone = document.getElementById('custPhone').value;
+
+    // Sri Lankan Phone Number Validation (10 digits, starts with 0)
+    const phoneRegex = /^0\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+        alert("Please enter a valid Sri Lankan phone number (e.g., 0712345678).");
+        return;
+    }
 
     if (id) {
         // Update
@@ -96,6 +104,7 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
 
     customerModal.hide();
     renderCustomerManagementTable();
+    loadCustomersForOrder(); // Refresh POS dropdown
 });
 
 // --- Phase 2: Product Management CRUD ---
